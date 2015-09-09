@@ -4,9 +4,10 @@
 #include <limits.h>
 #include <time.h>
 
+#ifndef _PHASH_H
+#define _PHASH_H
 
-
-#define PRIME_VAL 20011
+#define PRIMARY_TABLE_SIZE 20011
 #define MOD1 10011101
 #define INV_MOD1 8855974
 #define RM1 9759320
@@ -41,13 +42,13 @@ struct level_two
 long int generate_key(char *str, long int mod);
 /* generates key from a string takes input a string pointer and a large prime number */
 
-struct level_two *create_second_level(int );	
+struct level_two *create_second_level(int );
 /* allocates memory for second level hash table for a particular bucket */
 
 long int get_hash_key(char *string, int a, int b);
-/* 
+/*
 	returns the value after applyting hash function on the integer key of a string,
-	if we perform modulus with the primary table size then we'll get the location 
+	if we perform modulus with the primary table size then we'll get the location
 	to which we've to hash the element.
 */
 
@@ -64,12 +65,12 @@ long int count_collisions(struct level_one* table, int size);
 
 long int secondary_hash(char *string, int a, int b);
 /*
-	 returns the value after applying hash function of the secondary table 
+	 returns the value after applying hash function of the secondary table
 	 if we mod it with the secondary table size we'll find the location in secondary table to insert it.
 */
 
-void print_hash_table(struct level_one* table, long int *key_storage);
-/*	
+void print_hash_table(struct level_one* table);
+/*
 	it prints the whole hash table
 */
 
@@ -93,3 +94,4 @@ int compare_substring(char *first, char *mstring, int mstring_start, int mstring
 				starting from 'mstring_start' to 'mstring_end'.
 */
 
+#endif

@@ -20,8 +20,8 @@ int main(void)
     unsigned int seed = time(NULL);
     srand(seed);
 
-    int a = 1 + (rand() % (PRIME_VAL - 1));
-    int b = rand() % PRIME_VAL;
+    int a = 1 + (rand() % (PRIMARY_TABLE_SIZE - 1));
+    int b = rand() % PRIMARY_TABLE_SIZE;
 
     char input[201];
     char *main_string = (char *)malloc(100000 * sizeof(char));
@@ -33,7 +33,7 @@ int main(void)
         string_set[i] = (char *) malloc(101 * sizeof(char));
 
 
-    struct level_one *primary_table = (struct level_one*)calloc(PRIME_VAL, sizeof(struct level_one));
+    struct level_one *primary_table = (struct level_one*)calloc(PRIMARY_TABLE_SIZE, sizeof(struct level_one));
 
     scanf("%s", main_string);
 
@@ -41,7 +41,7 @@ int main(void)
     {
         scanf("%s", string_set[i]);
         key_storage[i] = generate_key(string_set[i], MOD1) ;
-        k = get_hash_key(string_set[i],a , b) % PRIME_VAL;
+        k = get_hash_key(string_set[i],a , b) % PRIMARY_TABLE_SIZE;
         ++(primary_table[k].freq);
 
         record_index(primary_table,k,i);
@@ -49,7 +49,7 @@ int main(void)
 
 
     /* BUILDING SECOND LEVEL HASH-TABLE */
-    for(i = 0; i < PRIME_VAL; ++i)
+    for(i = 0; i < PRIMARY_TABLE_SIZE; ++i)
     {
         if(primary_table[i].freq)
         {
@@ -58,7 +58,7 @@ int main(void)
     }
 
     /* GENERATING HASH FUNCTION FOR THE SECONDARY HASH FUNCTION AND PERFORMING HASHING */
-    for(i = 0; i < PRIME_VAL; ++i)
+    for(i = 0; i < PRIMARY_TABLE_SIZE; ++i)
     {
         collision_flag = 0;
         collision_count = 0;
@@ -71,8 +71,8 @@ int main(void)
                     exit(1);
                 }
 
-                primary_table[i].a = 1 + (rand() % (PRIME_VAL - 1));
-                primary_table[i].b = rand() % PRIME_VAL;
+                primary_table[i].a = 1 + (rand() % (PRIMARY_TABLE_SIZE - 1));
+                primary_table[i].b = rand() % PRIMARY_TABLE_SIZE;
 
                 secondary_ptr = primary_table[i].next_level;
                 index_ptr = primary_table[i].next_index;
@@ -126,8 +126,7 @@ int main(void)
 
     //puts("hash table created successfully");
 
-    //print_hash_table(primary_table,key_storage);
-
+    print_hash_table(primary_table);
 
     /* get Z value for first 100 elements from 0 - 99 */
 
@@ -148,7 +147,7 @@ int main(void)
         if(compare_substring(string_set[string_set_index], main_string, i-99, i ) == 0)
         {
             ++count;
-            printf("match at index : %d\n", string_set_index);
+            printf("%s\n", string_set[string_set_index]);
         }
     }
 
@@ -177,7 +176,7 @@ int main(void)
             if(compare_substring(string_set[string_set_index], main_string, i-99, i ) == 0)
             {
                 ++count;
-                printf("match at index : %d\n", string_set_index);
+                printf("%s\n", string_set[string_set_index]);
             }
         }
 

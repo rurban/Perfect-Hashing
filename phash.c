@@ -52,47 +52,35 @@ long int secondary_hash(char *string, int a, int b)
     return (a * key + b) % MOD2;
 }
 
-
-void print_hash_table(struct level_one* table, long int *key_storage)
+void print_hash_table(struct level_one *table)
 {
-    // printing hash table
-    struct level_two *secondary_ptr = NULL;
-    struct string_index *str_index = NULL;
-    int i,j,k,s;
-    for(i = 0; i < PRIME_VAL; ++i)
-    {
-        if(table[i].freq != 0)
-        {
-            j = (table[i].freq) * (table[i].freq);
-            secondary_ptr = table[i].next_level;
-            str_index = table[i].next_index;
-            puts("-----------------------");
-            printf("slot : %d items : %d size : %d\n",i,table[i].freq,table[i].freq * table[i].freq );
+	int i,j,k;
+	struct level_two *secondary_ptr = NULL;
 
-            while(str_index)
-            {
-                printf("%ld ", key_storage[str_index->index]);
-                str_index = str_index->next;
-            }
-            printf("\n" );
-            puts("-----------------------");
-            for(k = 0; k < j; ++k)
-            {
-                if(secondary_ptr[k].present)
-                    printf(" %ld ", secondary_ptr[k].hash_value);
-            }
-
-        }
-        printf("\n");
-    }
-
+	for(i = 0; i < PRIMARY_TABLE_SIZE; ++i)
+	{
+		printf("\nbucket %d >>  ", i+1);
+		if(table[i].freq)
+		{
+			k = 0;
+			j = table[i].freq * table[i].freq;
+			secondary_ptr = table[i].next_level;
+			while(k < j)
+			{
+				(secondary_ptr[k].present)? printf("%d  ", 1 + secondary_ptr[k].index) : printf("x  ");
+				++k;
+			}
+		}
+	}
+	printf("\n");
 }
+
 
 int find_string(struct level_one *table, long long int z1, long long int z2,int ga, int gb)
 {
     static emp_count = 0;
     // get the first level bucket the string would've mapped
-    long int level_one_bucket = ((ga * z1 + gb) % MOD1) % PRIME_VAL;
+    long int level_one_bucket = ((ga * z1 + gb) % MOD1) % PRIMARY_TABLE_SIZE;
 
     if(table[level_one_bucket].freq == 0)
     {
