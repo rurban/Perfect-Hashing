@@ -182,7 +182,7 @@ int main(void)
 
     }
 
-    printf("count matching : %d\n", count);
+    printf("\nno. of string(s) matched : %d\n", count);
 
     return EXIT_SUCCESS;
 }
