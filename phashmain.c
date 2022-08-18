@@ -3,7 +3,7 @@
 
 int main(void)
 {
-    int i,j,k;
+    int i,k,ret;
     int count = 0;
     int secondary_loc;
     long int secondary_hash_value;
@@ -14,7 +14,7 @@ int main(void)
 
     struct string_index *index_ptr = NULL;
     struct level_two *secondary_ptr = NULL;
-    struct string_index* new_node = NULL;
+    //struct string_index* new_node = NULL;
 
     unsigned int collision_flag, collision_count;
     unsigned int seed = time(NULL);
@@ -23,7 +23,7 @@ int main(void)
     int a = 1 + (rand() % (PRIMARY_TABLE_SIZE - 1));
     int b = rand() % PRIMARY_TABLE_SIZE;
 
-    char input[201];
+    //char input[201];
     char *main_string = (char *)malloc(100000 * sizeof(char));
 
     long int *key_storage = (long int *) calloc(10000, sizeof(long int));
@@ -35,11 +35,15 @@ int main(void)
 
     struct level_one *primary_table = (struct level_one*)calloc(PRIMARY_TABLE_SIZE, sizeof(struct level_one));
 
-    scanf("%s", main_string);
+    ret = scanf("%s", main_string);
+    if (ret != 1)
+        exit(1);
 
     for(i = 0; i < 10000; ++i)
     {
-        scanf("%s", string_set[i]);
+        ret = scanf("%s", string_set[i]);
+        if (ret != 1)
+            break;
         key_storage[i] = generate_key(string_set[i], MOD1) ;
         k = get_hash_key(string_set[i],a , b) % PRIMARY_TABLE_SIZE;
         ++(primary_table[k].freq);
@@ -144,7 +148,7 @@ int main(void)
     if(string_set_index >= 0)
     {// perform string matching at string_set[string_set_index] with main_string[i-100, i-1]
 
-        if(compare_substring(string_set[string_set_index], main_string, i-99, i ) == 0)
+        if(compare_substring(string_set[string_set_index], main_string, i-99, i) == 0)
         {
             ++count;
             printf("%s\n", string_set[string_set_index]);
@@ -158,13 +162,13 @@ int main(void)
         Z1 = (Z1*26 + main_string[i]) % MOD1;
 
         // Z1 = Z1 - main_string[i - 100];
-		// Z1 = (Z1 * INV_MOD1) % MOD1;
-		// Z1 = (Z1 + (RM1 * main_string[i]) % MOD1) % MOD1;
+        // Z1 = (Z1 * INV_MOD1) % MOD1;
+        // Z1 = (Z1 + (RM1 * main_string[i]) % MOD1) % MOD1;
         //
         //
         // Z2 = Z2 - main_string[i - 100];
-		// Z2 = (Z2 * INV_MOD2) % MOD2;
-		// Z2 = (Z2 + (RM2 * main_string[i]) % MOD2) % MOD2;
+        // Z2 = (Z2 * INV_MOD2) % MOD2;
+        // Z2 = (Z2 + (RM2 * main_string[i]) % MOD2) % MOD2;
 
         Z2 = (Z2 + MOD2 - (RM2 * main_string[i-100]) % MOD2) % MOD2;
         Z2 = (Z2*26 + main_string[i]) % MOD2;
@@ -173,7 +177,7 @@ int main(void)
 
         if(string_set_index >= 0)
         {// perform string matching at string_set[string_set_index] with main_string[i-100, i-1]
-            if(compare_substring(string_set[string_set_index], main_string, i-99, i ) == 0)
+            if(compare_substring(string_set[string_set_index], main_string, i-99, i) == 0)
             {
                 ++count;
                 printf("%s\n", string_set[string_set_index]);

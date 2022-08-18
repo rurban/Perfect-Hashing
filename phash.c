@@ -4,7 +4,7 @@ long int generate_key(char *str, long int mod)
 {
     int i;
     long int key_gen = 0;
-    int len = strlen(str);
+    //int len = strlen(str);
 
     for (i=0; i < 100 ; ++i)
             key_gen = ((key_gen * 26) + str[i]) % mod;
@@ -29,7 +29,7 @@ long int count_collisions(struct level_one* table, int size)
     long int count = 0;
     for (i = 0; i < size; ++i)
         count += combi(table[i].freq);
-
+    return count;
 }
 
 void record_index(struct level_one* table, int loc, int _index)
@@ -78,7 +78,7 @@ void print_hash_table(struct level_one *table)
 
 int find_string(struct level_one *table, long long int z1, long long int z2,int ga, int gb)
 {
-    static emp_count = 0;
+    //static emp_count = 0;
     // get the first level bucket the string would've mapped
     long int level_one_bucket = ((ga * z1 + gb) % MOD1) % PRIMARY_TABLE_SIZE;
 
@@ -109,8 +109,9 @@ int compare_substring(char *first, char *mstring, int i, int j)
     char *a, *b;
     a = first;
     b = &mstring[i];
+    const char *end = &mstring[j];
 
-    for( ; *a != '\0'; ++a, ++b)
+    for( ; *a != '\0' && b != end; ++a, ++b)
     {
         if(*a != *b)
             return 1;
